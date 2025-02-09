@@ -1,18 +1,19 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts'; // Ensure this is installed
+// import { Expenses } from '../pages';
 
-const Chart = () => {
+const Chart = ({ Income, Expense }) => {
     const [state, setState] = React.useState({
         series: [
             {
-                name: 'Income',
+                name: 'Pemasukan',
                 type: 'column',
-                data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+                data: Income
             },
             {
-                name: 'Cashflow',
+                name: 'Pengeluaran',
                 type: 'column',
-                data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
+                data: Expense
             },
         ],
         options: {
@@ -33,11 +34,11 @@ const Chart = () => {
                 offsetX: 110
             },
             xaxis: {
-                categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             },
             yaxis: [
                 {
-                    seriesName: 'Income',
+                    seriesName: 'Pemasukan',
                     axisTicks: {
                         show: true,
                     },
@@ -51,7 +52,7 @@ const Chart = () => {
                         }
                     },
                     title: {
-                        text: "Income (thousand crores)",
+                        text: "Pemasukan ",
                         style: {
                             color: '#008FFB',
                         }
@@ -76,34 +77,13 @@ const Chart = () => {
                         }
                     },
                     title: {
-                        text: "Operating Cashflow (thousand crores)",
+                        text: "Pengeluaran",
                         style: {
                             color: '#00E396',
                         }
                     },
                 },
-                {
-                    seriesName: 'Revenue',
-                    opposite: true,
-                    axisTicks: {
-                        show: true,
-                    },
-                    axisBorder: {
-                        show: true,
-                        color: '#FEB019'
-                    },
-                    labels: {
-                        style: {
-                            colors: '#FEB019',
-                        },
-                    },
-                    title: {
-                        text: "Revenue (thousand crores)",
-                        style: {
-                            color: '#FEB019',
-                        }
-                    }
-                },
+
             ],
             tooltip: {
                 fixed: {

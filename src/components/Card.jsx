@@ -1,6 +1,29 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { apiFetch } from '../api';
 
 const Card = () => {
+    const [item, setItem] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchItemDetails = async () => {
+            try {
+                const response = await apiFetch(`/cash`);
+                setItem(response.data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchItemDetails();
+    },);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+    if (!item) return <div>No item found</div>;
     return (
         <div>
             <div className="flex justify-center items-center">
@@ -12,7 +35,7 @@ const Card = () => {
                             <div className="px-4 py-5 sm:p-6">
                                 <dl>
                                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Uang Kas</dt>
-                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">1.6M</dd>
+                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">{item.cash}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -20,7 +43,7 @@ const Card = () => {
                             <div className="px-4 py-5 sm:p-6">
                                 <dl>
                                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Pemasukan</dt>
-                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">19.2K
+                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">{item.income}
                                     </dd>
                                 </dl>
                             </div>
@@ -29,7 +52,7 @@ const Card = () => {
                             <div className="px-4 py-5 sm:p-6">
                                 <dl>
                                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Pengeluaran</dt>
-                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">4.9K</dd>
+                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">{item.expense}</dd>
                                 </dl>
                             </div>
                         </div>
@@ -38,7 +61,7 @@ const Card = () => {
                                 <dl>
                                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Rumah
                                     </dt>
-                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">166.7K
+                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">{item.homes}
                                     </dd>
                                 </dl>
                             </div>
@@ -48,7 +71,7 @@ const Card = () => {
                                 <dl>
                                     <dt className="text-sm leading-5 font-medium text-gray-500 truncate dark:text-gray-400">Total Warga
                                     </dt>
-                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">166.7K
+                                    <dd className="mt-1 text-3xl leading-9 font-semibold text-blue-600 dark:text-blue-400">{item.users}
                                     </dd>
                                 </dl>
                             </div>

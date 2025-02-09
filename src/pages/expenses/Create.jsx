@@ -5,54 +5,28 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { number } from 'prop-types';
 
 const Create = () => {
-    const type = [{
-        value: "Tetap",
-        label: "Tetap",
-    }, {
-        value: "Kontrak",
-        label: "Kontrak",
-    },
-    ]
-    const status = [{
-        value: "Dihuni",
-        label: "Dihuni",
-    }, {
-        value: "Tidak Dihuni",
-        label: "Tidak Dihuni",
-    },
-    ]
     const fields = [
-        { name: 'number', label: 'Nomor Rumah', type: 'text', required: true },
-        {
-            name: 'type',
-            label: 'Tipe Rumah',
-            type: 'select',
-            required: true,
-            options: type, // Use the fetched categories
-        },
-        {
-            name: 'status',
-            label: 'Status Rumah',
-            type: 'select',
-            required: true,
-            options: status, // Use the fetched categories
-        },
+        { name: 'name', label: 'Nama Keperluan', type: 'text', required: true },
+        { name: 'desc', label: 'Deskripsi Keperluan Keperluan', type: 'text', required: true },
+        { name: 'date', label: 'Tanggal', type: 'date', required: true },
+        { name: 'amount', label: 'Jumlah', type: 'number', required: true },
+
     ];
 
 
     const handleSubmit = async (data) => {
         console.log('Creating item:', data.Object);
         const dataToSend = {
-            number: data.values.number,
-            type: data.values.type,
-            status: data.values.status
+            name: data.values.name,
+            desc: data.values.desc,
+            date: data.values.date,
+            amount: data.values.amount
         }
         console.log('Data to send item:', dataToSend);
         try {
-            const result = await apiFetch('/homes', 'POST', dataToSend); // Use the helper
+            const result = await apiFetch('/expenses', 'POST', dataToSend); // Use the helper
             console.log('Item created successfully:', result);
-            // window.location.reload();
-            Navigate('/homes');
+            window.location.href = `/expenses`;
         } catch (error) {
             console.error('Error creating item:', error);
         }
@@ -62,7 +36,7 @@ const Create = () => {
         <>
             <div className="w-3/4 mx-auto">
                 {/* <Card /> */}
-                <h1 className='font-semibold text-xl my-4'>Form Create Category</h1>
+                <h1 className='font-semibold text-xl my-4'>Form Tambah Pengeluaran</h1>
                 <Form fields={fields} onSubmit={handleSubmit} />
             </div>
         </>

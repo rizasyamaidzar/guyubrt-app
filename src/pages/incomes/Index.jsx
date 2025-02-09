@@ -5,7 +5,7 @@ import { apiFetch } from '../../api';
 const index = () => {
     const apiUrl = 'http://127.0.0.1:8000/api/incomes'; // Replace with your API URL
     const headers = ['Tanggal', 'Warga', "Category"];
-    const fields = ['date', 'number_phone', "status"];
+    const fields = ['date', 'user.name', "category.name"];
     const handleEdit = (id) => {
         // Logic to handle editing, e.g., navigate to edit form or open modal
         console.log('Edit item with ID:', id);

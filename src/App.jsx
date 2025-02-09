@@ -2,7 +2,7 @@
 import './App.css'
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { User, Incomes, Expenses, Homes, Category, Dashboard, DetailCategories, CreateHome, DetailHome, CreateExpenses, CreateUser, CreateIncomes } from "./pages";
+import { User, Incomes, Expenses, Homes, Category, Dashboard, DetailCategories, CreateHome, DetailHome, CreateExpenses, CreateUser, CreateIncomes, DetailUser } from "./pages";
 import Navbar from './components/Navbar';
 function App() {
 
@@ -16,6 +16,7 @@ function App() {
 
             <Route path="/users" element={<User />} exact />
             <Route path="/users/create" element={<CreateUser />} exact />
+            <Route path="/users/:id" element={<DetailUser />} exact />
 
             {/* route home  */}
             <Route path="/homes" element={<Homes />} exact />

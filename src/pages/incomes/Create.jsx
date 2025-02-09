@@ -1,41 +1,61 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Form from '../../components/Form';
 import { apiFetch } from '../../api';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { number } from 'prop-types';
 
 const Create = () => {
-    const type = [{
-        value: "Tetap",
-        label: "Tetap",
-    }, {
-        value: "Kontrak",
-        label: "Kontrak",
-    },
-    ]
-    const status = [{
-        value: "Dihuni",
-        label: "Dihuni",
-    }, {
-        value: "Tidak Dihuni",
-        label: "Tidak Dihuni",
-    },
-    ]
+    const [users, setUser] = useState([]);
+    const fetchHome = async () => {
+        try {
+            const result = await apiFetch('/users', 'GET');
+            console.log('Users fetched successfully:', result);
+
+            const userOptions = result.data.data.map(user => ({
+                value: user.id,
+                label: user.name,
+            }));
+            console.log(userOptions)
+            setUser(userOptions); // Store the options in state
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+    const [categories, setCategory] = useState([]);
+    const fetcCategory = async () => {
+        try {
+            const result = await apiFetch('/categories', 'GET');
+            console.log('Users fetched successfully:', result);
+
+            const categoryOptions = result.data.data.map(category => ({
+                value: category.id,
+                label: category.name,
+            }));
+            console.log(categoryOptions)
+            setCategory(categoryOptions);
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
+    useEffect(() => {
+        fetchHome();
+        fetcCategory();
+    }, []);
     const fields = [
-        { name: 'number', label: 'Nomor Rumah', type: 'text', required: true },
+        { name: 'date', label: 'Tanggal', type: 'date', required: true },
         {
-            name: 'type',
-            label: 'Tipe Rumah',
+            name: 'user_id',
+            label: 'Nama Warga',
             type: 'select',
             required: true,
-            options: type, // Use the fetched categories
+            options: users, // Use the fetched categories
         },
         {
-            name: 'status',
-            label: 'Status Rumah',
+            name: 'category_id',
+            label: 'Jenis Pembayaran',
             type: 'select',
             required: true,
-            options: status, // Use the fetched categories
+            options: categories, // Use the fetched categories
         },
     ];
 
@@ -43,16 +63,17 @@ const Create = () => {
     const handleSubmit = async (data) => {
         console.log('Creating item:', data.Object);
         const dataToSend = {
-            number: data.values.number,
-            type: data.values.type,
-            status: data.values.status
+            date: data.values.date,
+            user_id: Number(data.values.user_id),
+            category_id: Number(data.values.category_id)
         }
         console.log('Data to send item:', dataToSend);
         try {
-            const result = await apiFetch('/homes', 'POST', dataToSend); // Use the helper
+            const result = await apiFetch('/incomes', 'POST', dataToSend); // Use the helper
             console.log('Item created successfully:', result);
-            // window.location.reload();
-            Navigate('/homes');
+            // // window.location.reload();
+            // Navigate('/incomes');
+            window.location.href = `/incomes`;
         } catch (error) {
             console.error('Error creating item:', error);
         }
@@ -62,7 +83,7 @@ const Create = () => {
         <>
             <div className="w-3/4 mx-auto">
                 {/* <Card /> */}
-                <h1 className='font-semibold text-xl my-4'>Form Create Category</h1>
+                <h1 className='font-semibold text-xl my-4'>Form Tambah Pemasukan</h1>
                 <Form fields={fields} onSubmit={handleSubmit} />
             </div>
         </>

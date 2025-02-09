@@ -4,7 +4,7 @@ import Form from '../../components/Form';
 import { apiFetch } from '../../api';
 
 const index = () => {
-    const apiUrl = 'http://127.0.0.1:8000/api/categories'; // Replace with your API URL
+    const apiUrl = 'http://127.0.0.1:8000/api/categories';
     const headers = ['Name', 'Amount'];
     const Value = ['name', 'amount'];
 
@@ -12,7 +12,6 @@ const index = () => {
         { name: 'name', label: 'Name', type: 'text', required: true },
         { name: 'amount', label: 'amount', type: 'number', required: false },
 
-        // Add more fields as needed
     ];
 
     const handleSubmit = async (data) => {
@@ -23,7 +22,7 @@ const index = () => {
         }
         console.log('Data to send item:', dataToSend);
         try {
-            const result = await apiFetch('/categories', 'POST', dataToSend); // Use the helper
+            const result = await apiFetch('/categories', 'POST', dataToSend);
             console.log('Item created successfully:', result);
             window.location.reload();
         } catch (error) {
@@ -31,15 +30,13 @@ const index = () => {
         }
     };
     const handleEdit = (id) => {
-        // Logic to handle editing, e.g., navigate to edit form or open modal
         console.log('Edit item with ID:', id);
     };
 
     const handleDelete = async (id) => {
-        // Logic to handle deletion, e.g., making a DELETE request to the API
         console.log('Delete Category with ID:', id);
         try {
-            const result = await apiFetch(`/categories/${id}`, 'DELETE'); // Use the helper
+            const result = await apiFetch(`/categories/${id}`, 'DELETE');
             console.log('Category Delete successfully:', result);
             window.location.reload();
         } catch (error) {

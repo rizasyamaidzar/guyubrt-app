@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
 const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
-    const navigate = useNavigate()
-    const [data, setData] = useState([]); // Initial state as empty array
+    const navigate = useNavigate();
+    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -18,12 +18,11 @@ const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
                 const result = await response.json();
                 console.log(result); // Log the entire response for debugging
 
-                // Access the correct array from the nested data object
                 if (result.success && result.data && Array.isArray(result.data.data)) {
-                    setData(result.data.data); // Set the categories array
+                    setData(result.data.data);
                 } else {
                     console.error('Unexpected data format:', result);
-                    setData([]); // Handle unexpected format
+                    setData([]);
                 }
             } catch (err) {
                 console.error(err);
@@ -36,9 +35,13 @@ const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
         fetchData();
     }, [apiUrl]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
-    if (!Array.isArray(data)) return <div>Unexpected data format</div>; // Check data format
+    if (loading) return <div className="text-center">Loading...</div>;
+    if (error) return <div className="text-red-600">Error: {error.message}</div>;
+    if (!Array.isArray(data)) return <div className="text-yellow-600">Unexpected data format</div>;
+
+    const getNestedValue = (item, field) => {
+        return field.split('.').reduce((o, i) => (o ? o[i] : ''), item);
+    };
 
     return (
         <div className="relative overflow-x-auto">
@@ -50,7 +53,7 @@ const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
                                 {header}
                             </th>
                         ))}
-                        <th scope="col" className="px-6 py-3">Actions</th> {/* Actions header */}
+                        <th scope="col" className="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +61,7 @@ const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
                         <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                             {fields.map((field, idx) => (
                                 <td key={idx} className="px-6 py-4">
-                                    {item[field]} {/* Access item by field */}
+                                    {getNestedValue(item, field)} {/* Access item by field */}
                                 </td>
                             ))}
                             <td className="px-6 py-4">
@@ -69,24 +72,25 @@ const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
                                     View
                                 </a>
                                 <button
-                                    onClick={() => onEdit(item.id)} // Pass the item ID to the edit function
+                                    onClick={() => onEdit(item.id)}
                                     className="text-white rounded-lg p-2 bg-blue-600 mx-2"
+                                    aria-label={`Edit item ${item.id}`}
                                 >
                                     Edit
                                 </button>
                                 <button
-                                    onClick={() => onDelete(item.id)} // Pass the item ID to the delete function
+                                    onClick={() => onDelete(item.id)}
                                     className="text-white rounded-lg p-2 bg-red-600"
+                                    aria-label={`Delete item ${item.id}`}
                                 >
                                     Delete
                                 </button>
-
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </div >
+        </div>
     );
 };
 
@@ -94,10 +98,10 @@ const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
 Table.propTypes = {
     apiUrl: PropTypes.string.isRequired,
     headers: PropTypes.arrayOf(PropTypes.string).isRequired,
-    fields: PropTypes.arrayOf(PropTypes.string).isRequired, // New prop for fields
-    onEdit: PropTypes.func.isRequired, // Function to handle edit
+    fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+    onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
-    detailUrl: PropTypes.string.isRequired, // Function to handle delete
+    detailUrl: PropTypes.string.isRequired,
 };
 
 export default Table;
