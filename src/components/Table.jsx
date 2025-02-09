@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-const Table = ({ apiUrl, headers, fields }) => {
+const Table = ({ apiUrl, headers, fields, onEdit, onDelete, detailUrl }) => {
+    const navigate = useNavigate()
     const [data, setData] = useState([]); // Initial state as empty array
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -48,6 +50,7 @@ const Table = ({ apiUrl, headers, fields }) => {
                                 {header}
                             </th>
                         ))}
+                        <th scope="col" className="px-6 py-3">Actions</th> {/* Actions header */}
                     </tr>
                 </thead>
                 <tbody>
@@ -58,11 +61,32 @@ const Table = ({ apiUrl, headers, fields }) => {
                                     {item[field]} {/* Access item by field */}
                                 </td>
                             ))}
+                            <td className="px-6 py-4">
+                                <a
+                                    href={detailUrl.replace(':id', item.id)}
+                                    className="text-white rounded-lg p-2 bg-green-600"
+                                >
+                                    View
+                                </a>
+                                <button
+                                    onClick={() => onEdit(item.id)} // Pass the item ID to the edit function
+                                    className="text-white rounded-lg p-2 bg-blue-600 mx-2"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => onDelete(item.id)} // Pass the item ID to the delete function
+                                    className="text-white rounded-lg p-2 bg-red-600"
+                                >
+                                    Delete
+                                </button>
+
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-        </div>
+        </div >
     );
 };
 
@@ -71,6 +95,9 @@ Table.propTypes = {
     apiUrl: PropTypes.string.isRequired,
     headers: PropTypes.arrayOf(PropTypes.string).isRequired,
     fields: PropTypes.arrayOf(PropTypes.string).isRequired, // New prop for fields
+    onEdit: PropTypes.func.isRequired, // Function to handle edit
+    onDelete: PropTypes.func.isRequired,
+    detailUrl: PropTypes.string.isRequired, // Function to handle delete
 };
 
 export default Table;

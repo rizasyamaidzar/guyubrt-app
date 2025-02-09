@@ -49,6 +49,15 @@ const Form = ({ initialValues = {}, onSubmit, fields }) => {
                                 </option>
                             ))}
                         </select>
+                    ) : field.type === 'file' ? (
+                        <input
+                            type="file"
+                            name={field.name}
+                            id={field.name}
+                            onChange={handleChange}
+                            required={field.required}
+                            className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 p-2"
+                        />
                     ) : (
                         <input
                             type={field.type}
